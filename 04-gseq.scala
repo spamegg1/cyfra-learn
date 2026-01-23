@@ -10,7 +10,7 @@ val colors             = GSeq.of(List(red, green, blue))
 val integers = GSeq.gen[Int32](0, n => n + 1)
 
 // Generate Fibonacci-like: (0,1), (1,1), (1,2), (2,3), ...
-// val fibonacci = GSeq.gen[(Int32, Int32)]((0, 1), pair => (pair._2, pair._1 + pair._2))
+val fibonacci = GSeq.gen[Vec2[Float32]]((0f, 1f), pair => (pair.y, pair.x + pair.y))
 
 // Mandelbrot iteration: z = z² + c
 val (cx, cy)   = (0.4f, 0.3f)
@@ -50,3 +50,7 @@ val sum: Int32 = GSeq.gen[Int32](1, _ + 1).limit(10).fold(0, _ + _)
 
 // LastOr: get final element (or default if empty)
 val finalValue: Int32 = GSeq.gen[Int32](0, _ + 1).limit(10).lastOr(0)
+
+@main
+def runGSeq(): Unit = VkCyfraRuntime.using:
+  println(finalValue) // TODO: how to print results from a GSeq
