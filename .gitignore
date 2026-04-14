@@ -38,6 +38,9 @@ metals.sbt
 .idea_modules
 /.worksheet/
 
+# GPU
+GPU/
+
 # Misc.
 *.rb
 *.py
