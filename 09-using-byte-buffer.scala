@@ -6,13 +6,10 @@ import io.computenode.cyfra.runtime.VkCyfraRuntime
 import java.nio.{ByteBuffer, ByteOrder}
 
 object UsingByteBuffers:
-  case class MyLayout(
-      input: GBuffer[Int32],
-      output: GBuffer[Int32]
-  ) derives Layout
+  case class DoubleLayout(input: GBuffer[Int32], output: GBuffer[Int32]) derives Layout
 
-  val doubleProgram = GProgram.static[Int, MyLayout](
-    layout = size => MyLayout(GBuffer[Int32](size), GBuffer[Int32](size)),
+  val doubleProgram = GProgram.static[Int, DoubleLayout](
+    layout = size => DoubleLayout(GBuffer[Int32](size), GBuffer[Int32](size)),
     dispatchSize = size => size
   ): layout =>
     val idx   = GIO.invocationId
@@ -26,18 +23,26 @@ object UsingByteBuffers:
     val byteBuffer = ByteBuffer.allocateDirect(size * 4).order(ByteOrder.nativeOrder())
     byteBuffer.asIntBuffer().put(data)
     byteBuffer.flip()
-    val results = Array.ofDim[Int](size)
+
+    val resultBuffer = ByteBuffer.allocateDirect(size * 4).order(ByteOrder.nativeOrder())
 
     val region = GBufferRegion
-      .allocate[MyLayout]
+      .allocate[DoubleLayout]
       .map: layout =>
-        val afterDouble = doubleProgram.execute(size, MyLayout(layout.input, layout.output))
+        val afterDouble = doubleProgram.execute(size, DoubleLayout(layout.input, layout.output))
         layout
 
     region.runUnsafe(
-      init = MyLayout(
+      init = DoubleLayout(
         input = GBuffer[Int32](byteBuffer), // Initialize from ByteBuffer
         output = GBuffer[Int32](size)
       ),
-      onDone = layout => layout.output.readArray(results)
+      onDone = layout =>
+        layout.output.read(resultBuffer) // Read into ByteBuffer
+        // layout.someBuffer.write(updateBuffer) // write to GPU
     )
+
+    // Access results
+    val intView    = resultBuffer.asIntBuffer()
+    val firstValue = intView.get(0)
+    println(firstValue)

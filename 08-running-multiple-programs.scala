@@ -65,3 +65,6 @@ object RunningMultiplePrograms:
       ),
       onDone = layout => layout.output.readArray(results)
     )
+
+    println(s"Results: ${results.take(10).mkString(", ")}...")
+    // Results: 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 24.0, 26.0, 28.0...

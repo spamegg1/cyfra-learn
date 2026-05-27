@@ -3,7 +3,7 @@ import io.computenode.cyfra.runtime.VkCyfraRuntime
 import io.computenode.cyfra.dsl.{*, given}
 
 @main
-def run = VkCyfraRuntime.using:
+def runDoubleProgram = VkCyfraRuntime.using:
   val size      = 256
   val inputData = (0 until size).map(_.toFloat).toArray
   val results   = Array.ofDim[Float](size)
