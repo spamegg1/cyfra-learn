@@ -43,7 +43,7 @@ object Img:
         bnew = bnew + neighbor.blue
         anew = anew + neighbor.alpha
         j = j + 1
-
+      end while
       i = i + 1
       j = ymin // back to leftmost
     end while
