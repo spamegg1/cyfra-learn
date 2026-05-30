@@ -43,7 +43,7 @@ object HorizontalBoxBlur:
 
     while y < end do
       while x < src.width do
-        dst(x, y) = Img.boxBlurKernel(src, x, y, radius)
+        dst(x, y) = src.boxBlurKernel(x, y, radius)
         x = x + 1 // go to right pixel
       end while
       y = y + 1 // go to next row

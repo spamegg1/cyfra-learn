@@ -15,7 +15,7 @@ object VerticalBoxBlur:
 
     while x < end do
       while y < src.height do
-        dst(x, y) = Img.boxBlurKernel(src, x, y, radius)
+        dst(x, y) = src.boxBlurKernel(x, y, radius)
         y = y + 1 // go to pixel below
       x = x + 1   // go to next column
       y = 0       // go back to top

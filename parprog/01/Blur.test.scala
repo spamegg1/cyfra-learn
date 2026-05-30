@@ -16,7 +16,7 @@ class BlurSuite extends munit.FunSuite:
       y <- 0 until 5
     do
       assertEquals(
-        Img.boxBlurKernel(src, x, y, 0),
+        src.boxBlurKernel(x, y, 0),
         RGBA.rgba(x, y, x + y, math.abs(x - y)),
         "boxBlurKernel(_,_,0) should be identity."
       )
@@ -28,6 +28,6 @@ class BlurSuite extends munit.FunSuite:
     src(0, 2) = 6; src(1, 2) = 7; src(2, 2) = 8
     src(0, 3) = 50; src(1, 3) = 11; src(2, 3) = 16
 
-    val res = Img.boxBlurKernel(src, 1, 2, 1)
+    val res = src.boxBlurKernel(1, 2, 1)
 
     assertEquals(res, 12, s"(boxBlurKernel(1, 2, 1) should be 12, but it's ${res})")
