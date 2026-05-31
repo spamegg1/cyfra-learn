@@ -5,8 +5,8 @@ import org.scalameter.*
 import java.awt.*, event.{ActionEvent, ActionListener}
 import javax.swing.*
 
-object ScalaShop:
-  class ScalaShopFrame extends JFrame("ScalaShop"):
+object Blur:
+  class BlurFrame extends JFrame("Blur"):
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     setSize(1800, 1000)
     setLayout(BorderLayout())
@@ -66,7 +66,7 @@ object ScalaShop:
       new ActionListener:
         def actionPerformed(e: ActionEvent): Unit =
           val fc = JFileChooser()
-          if fc.showOpenDialog(ScalaShopFrame.this) == JFileChooser.APPROVE_OPTION
+          if fc.showOpenDialog(BlurFrame.this) == JFileChooser.APPROVE_OPTION
           then canvas.loadFile(fc.getSelectedFile.getPath)
 
     fileMenu.add(openMenuItem)
@@ -84,7 +84,7 @@ object ScalaShop:
     aboutMenuItem.addActionListener:
       new ActionListener:
         def actionPerformed(e: ActionEvent): Unit =
-          JOptionPane.showMessageDialog(null, "ScalaShop")
+          JOptionPane.showMessageDialog(null, "Blur")
 
     helpMenu.add(aboutMenuItem)
     mainMenuBar.add(helpMenu)
@@ -97,7 +97,7 @@ object ScalaShop:
     def getNumTasks: Int      = tasksSpinner.getValue.asInstanceOf[Int]
     def getRadius: Int        = radiusSpinner.getValue.asInstanceOf[Int]
     def getFilterName: String = filterCombo.getSelectedItem.asInstanceOf[String]
-  end ScalaShopFrame
+  end BlurFrame
 
   @main
   def main: Unit =
@@ -105,5 +105,5 @@ object ScalaShop:
     catch
       case _: Exception =>
         println("Cannot set look and feel, using the default one.")
-    val frame = ScalaShopFrame()
+    val frame = BlurFrame()
     frame.repaint()

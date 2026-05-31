@@ -1,36 +1,6 @@
 package parprog
 package blur
 
-import org.scalameter.*
-
-object HorizontalBoxBlurRunner:
-  val standardConfig = config(
-    Key.exec.minWarmupRuns := 5,
-    Key.exec.maxWarmupRuns := 10,
-    Key.exec.benchRuns     := 10,
-    Key.verbose            := false
-  ).withWarmer(Warmer.Default())
-
-  @main
-  def mainHorizontal: Unit =
-    val radius  = 3
-    val width   = 1920
-    val height  = 1080
-    val src     = Img(width, height)
-    val dst     = Img(width, height)
-    val seqtime = standardConfig.measure:
-      HorizontalBoxBlur.blur(src, dst, 0, height, radius)
-
-    println(s"sequential blur time: $seqtime")
-
-    val numTasks = 32
-    val partime  = standardConfig.measure:
-      HorizontalBoxBlur.parBlur(src, dst, numTasks, radius)
-
-    println(s"fork/join blur time: $partime")
-    println(s"speedup: ${seqtime.value / partime.value}")
-end HorizontalBoxBlurRunner
-
 /** A simple, trivially parallelizable computation. */
 object HorizontalBoxBlur:
   /** Blurs the rows of the source image `src` into the destination image `dst`, starting with `from` and ending with
@@ -63,3 +33,33 @@ object HorizontalBoxBlur:
       endPt = math.min(from + stripSize, src.height) // careful!
     yield Parallel.task { blur(src, dst, from, endPt, radius) }
     tasks.map(_.join) // joining OUTSIDE for-loop necessary for parallelization
+
+object HorizontalBoxBlurRunner:
+  import org.scalameter.*
+
+  val standardConfig = config(
+    Key.exec.minWarmupRuns := 5,
+    Key.exec.maxWarmupRuns := 10,
+    Key.exec.benchRuns     := 10,
+    Key.verbose            := false
+  ).withWarmer(Warmer.Default())
+
+  @main
+  def mainHorizontal: Unit =
+    val radius  = 3
+    val width   = 1920
+    val height  = 1080
+    val src     = Img(width, height)
+    val dst     = Img(width, height)
+    val seqtime = standardConfig.measure:
+      HorizontalBoxBlur.blur(src, dst, 0, height, radius)
+
+    println(s"sequential blur time: $seqtime")
+
+    val numTasks = 32
+    val partime  = standardConfig.measure:
+      HorizontalBoxBlur.parBlur(src, dst, numTasks, radius)
+
+    println(s"fork/join blur time: $partime")
+    println(s"speedup: ${seqtime.value / partime.value}")
+end HorizontalBoxBlurRunner

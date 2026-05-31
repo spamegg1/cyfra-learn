@@ -1,13 +1,10 @@
 package parprog
 package blur
 
-import java.awt.*
-import java.awt.event.*
-import java.awt.image.*
-import java.io.*
-import javax.imageio.*
+import java.awt.*, image.BufferedImage
+import java.io.{InputStream, FileInputStream}
+import javax.imageio.ImageIO
 import javax.swing.*
-import javax.swing.event.*
 
 class PhotoCanvas extends JComponent:
   var imagePath: Option[String] = None
