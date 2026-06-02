@@ -1,6 +1,8 @@
 package parprog
 package blur
 
+import javax.imageio.ImageIO
+import java.io.InputStream
 import RGBA.*
 
 /** Image is a two-dimensional matrix of pixel values. */
@@ -44,6 +46,7 @@ class Img(val width: Int, val height: Int, private val data: Array[RGBA]):
     /* average the 4 channels and create a new RGBA value out of them */
     RGBA.rgba(rnew / nghCount, gnew / nghCount, bnew / nghCount, anew / nghCount)
   end boxBlurKernel
+end Img
 
 object Img:
   def apply(w: Int, h: Int) = new Img(w, h, new Array(w * h))
@@ -51,3 +54,20 @@ object Img:
   /** Restricts the integer into the specified range. */
   def clamp(v: Int, min: Int, max: Int): Int =
     if v < min then min else if v > max then max else v
+
+  def load: Img =
+    val file   = os.pwd / "parprog" / "01" / "images" / "cream.jpg"
+    val stream = os.read.inputStream(file)
+    try loadImage(stream)
+    finally stream.close()
+
+  private def loadImage(inputStream: InputStream): Img =
+    val buf    = ImageIO.read(inputStream)
+    val width  = buf.getWidth
+    val height = buf.getHeight
+    val img    = Img(width, height)
+    for
+      x <- 0 until width
+      y <- 0 until height
+    do img(x, y) = buf.getRGB(x, y)
+    img

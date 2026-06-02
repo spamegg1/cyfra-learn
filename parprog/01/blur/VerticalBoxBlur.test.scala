@@ -1,7 +1,7 @@
 package parprog
 package blur
 
-class VerticalBoxBlurSuite extends BlurSuite:
+class VerticalBoxBlurSuite extends ImgSuite:
   test("VerticalBoxBlur.blur with radius 2 should correctly blur the entire 4x3 image"):
     val w          = 4
     val h          = 3

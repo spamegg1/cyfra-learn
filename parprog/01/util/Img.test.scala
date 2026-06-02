@@ -1,7 +1,7 @@
 package parprog
 package blur
 
-class BlurSuite extends munit.FunSuite:
+class ImgSuite extends munit.FunSuite:
   def check(x: Int, y: Int, expected: Int)(using dest: Img) =
     assertEquals(dest(x, y), expected, s"(destination($x, $y) should be $expected)")
 

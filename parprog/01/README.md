@@ -7,8 +7,8 @@ The box blur filter outputs an image in which every pixel has
 an average value of the surrounding pixels from the original image.
 The box blur filter is an example of an *embarrassingly parallel* problem:
 no or very little effort is required to separate it into parallel tasks.
-Every pixel of the output image can be computed independently of the other pixels,
-and in parallel.
+Every pixel of the output image can be computed
+independently of the other pixels, and in parallel.
 
 We will proceed in four steps.
 
@@ -189,13 +189,9 @@ points to create a list of start and end tuples, one for each strip
 construct to start a parallel task for each strip, and then call **join**
 on each task to wait for its completion.
 
-Run the **VerticalBoxBlur** program with the following sbt command:
-
-```scala
-> runMain scalashop.VerticalBoxBlurRunner
-```
-
-Change the number of tasks and the radius parameter. How does the performance change?
+Run the **VerticalBoxBlur** program.
+Change the number of tasks and the radius parameter.
+How does the performance change?
 
 ## Horizontal Stripping Box Blur
 
@@ -216,11 +212,7 @@ Note that the arguments **from** (included) and **end** (excluded) this
 time denote the the values of the **y** coordinate (i.e, row indices),
 and that we traverse the pixels left-to-right within each strip.
 
-You can now run the **HorizontalBoxBlur** program with
-
-```scala
-> runMain scalashop.HorizontalBoxBlurRunner
-```
+You can now run the **HorizontalBoxBlur** program.
 
 If you implemented the two blur versions correctly,
 you should observe that the horizontal stripping is slightly faster.
@@ -232,13 +224,7 @@ from the memory during the previous invocation of **boxBlurKernel**.
 The processor cores spend less time fetching pixels from memory,
 and lower the pressure on the memory bus.
 
-## ScalaShop
-
-Now we have everything we need to start ScalaShop:
-
-```scala
-> runMain scalashop.ScalaShop
-```
+## Test
 
 Change the blur implementation, parallelism level and blur radius,
 and study the effect your changes have on performance.
