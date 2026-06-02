@@ -81,7 +81,7 @@ two-dimensional image model and the one-dimensional memory model.
 We will do this by storing consecutive rows of the image one after another,
 as illustrated in the following figure:
 
-![img](mapping.png)
+![img](images/mapping.png)
 
 Thus, the offset of a pixel at coordinates **x** and **y**,
 is equal to **y \* width + x**, where **width** is the number of pixels in a single row.
@@ -122,7 +122,7 @@ The kernel method is typically computationally cheap and is not worth
 parallelizing its implementation. However, as we will later see,
 we can apply the same kernel method to different pixels in parallel.
 
-![img](kernel.png)
+![img](images/kernel.png)
 
 The **boxBlurKernel** method takes the source image **src**,
 coordinates **x** and **y** of the pixel, and the **radius** of the blur.
@@ -160,7 +160,7 @@ For each strip, we start a parallel task, and wait for their completion.
 Within each strip, we traverse the pixels going from the top to the bottom of the image,
 as illustrated in the following figure:
 
-![img](vertical.png)
+![img](images/vertical.png)
 
 We start by implementing the sequential **blur** method in
 the **VerticalBoxBlur.scala** source file, which takes the source image **src**,
@@ -203,7 +203,7 @@ In this part of the exercise we will pick an alternative agglomeration
 for the box blur algorithm. Instead of dividing the image into vertical strips,
 we will divide it into horizontal strips in a similar way:
 
-![img](horizontal.png)
+![img](images/horizontal.png)
 
 We implement the two methods, **blur** and **parBlur** in a similar way as before:
 
