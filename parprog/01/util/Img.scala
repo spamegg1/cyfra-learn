@@ -1,8 +1,6 @@
 package parprog
 package blur
 
-import javax.imageio.ImageIO
-import java.io.InputStream
 import RGBA.*
 
 /** Image is a two-dimensional matrix of pixel values. */
@@ -49,11 +47,32 @@ class Img(val width: Int, val height: Int, private val data: Array[RGBA]):
 end Img
 
 object Img:
+  import java.awt.image.BufferedImage
+  import java.io.{InputStream, OutputStream}
+  import javax.imageio.ImageIO
+
   def apply(w: Int, h: Int) = new Img(w, h, new Array(w * h))
 
   /** Restricts the integer into the specified range. */
   def clamp(v: Int, min: Int, max: Int): Int =
     if v < min then min else if v > max then max else v
+
+  def save(img: Img, horiz: Boolean): Unit =
+    val name   = if horiz then "horiz" else "vert"
+    val file   = os.pwd / "parprog" / "01" / "images" / s"cream-blurred-$name.jpg"
+    val stream = os.write.outputStream(file)
+    try saveImage(stream, img)
+    finally stream.close()
+
+  private def saveImage(stream: OutputStream, img: Img): Unit =
+    val width  = img.width
+    val height = img.height
+    val buf    = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
+    for
+      x <- 0 until width
+      y <- 0 until height
+    do buf.setRGB(x, y, img(x, y))
+    ImageIO.write(buf, "jpg", stream)
 
   def load: Img =
     val file   = os.pwd / "parprog" / "01" / "images" / "cream.jpg"
@@ -71,3 +90,4 @@ object Img:
       y <- 0 until height
     do img(x, y) = buf.getRGB(x, y)
     img
+end Img

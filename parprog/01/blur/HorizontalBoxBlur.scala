@@ -26,40 +26,15 @@ object HorizontalBoxBlur:
     */
   def parBlur(src: Img, dst: Img, numTasks: Int, radius: Int): Unit = // TODO
     // implement using the `task` construct and the `blur` method
-    // autograder complained about this being 0
     val stripSize: Int = math.max(src.height / numTasks, 1)
-    val tasks          = for
-      from <- 0 until src.height by stripSize
-      endPt = math.min(from + stripSize, src.height) // careful!
-    yield Parallel.task { blur(src, dst, from, endPt, radius) }
+    val tasks          =
+      for
+        from <- 0 until src.height by stripSize
+        endPt = math.min(from + stripSize, src.height) // careful!
+      yield Parallel.task:
+        blur(src, dst, from, endPt, radius)
     tasks.map(_.join) // joining OUTSIDE for-loop necessary for parallelization
-
-object HorizontalBoxBlurRunner:
-  import org.scalameter.*
-
-  val standardConfig = config(
-    Key.exec.minWarmupRuns := 5,
-    Key.exec.maxWarmupRuns := 10,
-    Key.exec.benchRuns     := 10,
-    Key.verbose            := false
-  ).withWarmer(Warmer.Default())
 
   @main
   def mainHorizontal: Unit =
-    val radius  = 3
-    val width   = 1920
-    val height  = 1080
-    val src     = Img(width, height)
-    val dst     = Img(width, height)
-    val seqtime = standardConfig.measure:
-      HorizontalBoxBlur.blur(src, dst, 0, height, radius)
-
-    println(s"sequential blur time: $seqtime")
-
-    val numTasks = 32
-    val partime  = standardConfig.measure:
-      HorizontalBoxBlur.parBlur(src, dst, numTasks, radius)
-
-    println(s"fork/join blur time: $partime")
-    println(s"speedup: ${seqtime.value / partime.value}")
-end HorizontalBoxBlurRunner
+    Runner.runBlur(HorizontalBoxBlur.blur, HorizontalBoxBlur.parBlur, horiz = true)
