@@ -30,15 +30,15 @@ By the time you are finished with this assignment, you will:
 
 Before we begin, we need to cover some basic data types and helper methods.
 These utilities have already been implemented in the package object for this exercise.
-First, we will use the **RGBA** type to refer to the value of an image pixel.
+First, we will use the **Rgba** type to refer to the value of an image pixel.
 We will limit ourselves to 32-bit pixel depth images,
-so we define **RGBA** to be equal to the 32-bit integer type:
+so we define **Rgba** to be equal to the 32-bit integer type:
 
 ```scala
-type RGBA = Int
+type Rgba = Int
 ```
 
-Why do we call this type **RGBA**?
+Why do we call this type **Rgba**?
 This is because each pixel value is composed from 4 components:
 red, green, blue and alpha, where alpha denotes the amount of transparency
 in the respective pixel. These components are referred to as *channels*.
@@ -48,17 +48,17 @@ We can extract the red, green, blue and alpha channel using the following
 utility methods, which use bit masking and bit shifting:
 
 ```scala
-def red(c: RGBA): Int   = (0xff000000 & c) >>> 24
-def green(c: RGBA): Int = (0x00ff0000 & c) >>> 16
-def blue(c: RGBA): Int  = (0x0000ff00 & c) >>> 8
-def alpha(c: RGBA): Int = (0x000000ff & c) >>> 0
+def red(c: Rgba): Int   = (0xff000000 & c) >>> 24
+def green(c: Rgba): Int = (0x00ff0000 & c) >>> 16
+def blue(c: Rgba): Int  = (0x0000ff00 & c) >>> 8
+def alpha(c: Rgba): Int = (0x000000ff & c) >>> 0
 ```
 
 Similarly, given the values of the four channels,
 we can obtain the pixel value like this:
 
 ```scala
-def rgba(r: Int, g: Int, b: Int, a: Int): RGBA =
+def Rgba(r: Int, g: Int, b: Int, a: Int): Rgba =
   (r << 24) | (g << 16) | (b << 8) | (a << 0)
 ```
 
@@ -66,10 +66,10 @@ Now that we know how to manipulate individual pixels,
 we can define our image type **Img**:
 
 ```scala
-class Img(val width: Int, val height: Int, private val data: Array[RGBA]):
-  def this(w: Int, h: Int) = this(w, h new Array[RGBA](w * h))
-  def apply(x: Int, y: Int): RGBA = data(y * width + x)
-  def update(x: Int, y: Int, c: RGBA): Unit = data(y * width + x) = c
+class Img(val width: Int, val height: Int, private val data: Array[Rgba]):
+  def this(w: Int, h: Int) = this(w, h new Array[Rgba](w * h))
+  def apply(x: Int, y: Int): Rgba = data(y * width + x)
+  def update(x: Int, y: Int, c: Rgba): Unit = data(y * width + x) = c
 ```
 
 The image is a two-dimensional entity: to refer to a pixel in an image,
@@ -136,7 +136,7 @@ the average is computed from 9 pixels.
 You can find its signature in the package object of this assignment:
 
 ```scala
-def boxBlurKernel(src: Img, x: Int, y: Int, radius: Int): RGBA
+def boxBlurKernel(src: Img, x: Int, y: Int, radius: Int): Rgba
 ```
 
 Implement the **boxBlurKernel** method. Use two nested **while**-loops.
@@ -163,7 +163,7 @@ as illustrated in the following figure:
 ![img](images/vertical.png)
 
 We start by implementing the sequential **blur** method in
-the **VerticalBoxBlur.scala** source file, which takes the source image **src**,
+the **VertBlur.scala** source file, which takes the source image **src**,
 the destination image **dst**, the starting (included) and ending (excluded)
 **x** coordinates (i.e, column indices) of the strip, called **from** and **end**,
 and the blur **radius**. The **blur** method blurs the pixels from the **src**
@@ -189,7 +189,7 @@ points to create a list of start and end tuples, one for each strip
 construct to start a parallel task for each strip, and then call **join**
 on each task to wait for its completion.
 
-Run the **VerticalBoxBlur** program.
+Run the **VertBlur** program.
 Change the number of tasks and the radius parameter.
 How does the performance change?
 
@@ -212,7 +212,7 @@ Note that the arguments **from** (included) and **end** (excluded) this
 time denote the the values of the **y** coordinate (i.e, row indices),
 and that we traverse the pixels left-to-right within each strip.
 
-You can now run the **HorizontalBoxBlur** program.
+You can now run the **HorizBlur** program.
 
 If you implemented the two blur versions correctly,
 you should observe that the horizontal stripping is slightly faster.

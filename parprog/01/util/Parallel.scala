@@ -19,11 +19,9 @@ object Parallel:
     def schedule[T](body: => T): ForkJoinTask[T] =
       val t = new RecursiveTask[T]:
         def compute = body
-
       Thread.currentThread match
         case wt: ForkJoinWorkerThread => t.fork()
         case _                        => forkJoinPool.execute(t)
-
       t
 
   val scheduler = DynamicVariable[TaskScheduler](DefaultTaskScheduler())

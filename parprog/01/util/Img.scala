@@ -1,48 +1,48 @@
 package parprog
 package blur
 
-import RGBA.*
+import Rgba.*
 
 /** Image is a two-dimensional matrix of pixel values. */
-class Img(val width: Int, val height: Int, private val data: Array[RGBA]):
-  def apply(x: Int, y: Int): RGBA           = data(y * width + x)
-  def update(x: Int, y: Int, c: RGBA): Unit = data(y * width + x) = c
+class Img(val width: Int, val height: Int, private val data: Array[Rgba]):
+  def apply(x: Int, y: Int): Rgba           = data(y * width + x)
+  def update(x: Int, y: Int, c: Rgba): Unit = data(y * width + x) = c
 
-  /** Computes the blurred RGBA value of a single pixel of the input image. */
-  def boxBlurKernel(x: Int, y: Int, radius: Int): RGBA = // TODO
+  /** Computes the blurred Rgba value of a single pixel of the input image. */
+  def boxBlurKernel(x: Int, y: Int, radius: Int): Rgba = // TODO
     // implement using while loops
     /* declare variables for the 4 averages and neighbor count */
-    var rnew, gnew, bnew, anew, nghCount = 0
+    var rnew, gnew, bnew, anew, count = 0
 
     /* define bounds for the while loops by clamping down on x -+ radius, y -+ radius */
-    val xmin: Int = Img.clamp(x - radius, 0, width - 1)
-    val xmax: Int = Img.clamp(x + radius, 0, width - 1)
-    val ymin: Int = Img.clamp(y - radius, 0, height - 1)
-    val ymax: Int = Img.clamp(y + radius, 0, height - 1)
+    val xmin = Img.clamp(x - radius, 0, width - 1)
+    val xmax = Img.clamp(x + radius, 0, width - 1)
+    val ymin = Img.clamp(y - radius, 0, height - 1)
+    val ymax = Img.clamp(y + radius, 0, height - 1)
 
     /* define variables for the while loops */
-    var i: Int = xmin
-    var j: Int = ymin
+    var i = xmin
+    var j = ymin
 
     /* get neighbors within clamped borders */
     while i <= xmax do
       while j <= ymax do
-        val neighbor: RGBA = apply(i, j)
-        nghCount = nghCount + 1
+        val neighbor = apply(i, j)
+        count += 1
 
-        /* add neighbor's RGBA values to accumulated 4 channels */
+        /* add neighbor's Rgba values to accumulated 4 channels */
         rnew = rnew + neighbor.red
         gnew = gnew + neighbor.green
         bnew = bnew + neighbor.blue
         anew = anew + neighbor.alpha
-        j = j + 1
+        j += 1
       end while
-      i = i + 1
+      i += 1
       j = ymin // back to leftmost
     end while
 
-    /* average the 4 channels and create a new RGBA value out of them */
-    RGBA.rgba(rnew / nghCount, gnew / nghCount, bnew / nghCount, anew / nghCount)
+    /* average the 4 channels and create a new Rgba value out of them */
+    Rgba.rgba(rnew / count, gnew / count, bnew / count, anew / count)
   end boxBlurKernel
 end Img
 

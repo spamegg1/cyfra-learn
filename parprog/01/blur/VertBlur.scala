@@ -2,7 +2,7 @@ package parprog
 package blur
 
 /** A simple, trivially parallelizable computation. */
-object VerticalBoxBlur:
+object VertBlur:
   /** Blurs the columns of the source image `src` into the destination image `dst`, starting with `from` and ending with
     * `end` (non-inclusive). Within each column, `blur` traverses the pixels by going from top to bottom.
     */
@@ -34,4 +34,4 @@ object VerticalBoxBlur:
 
   @main
   def mainVertical: Unit =
-    Runner.runBlur(VerticalBoxBlur.blur, VerticalBoxBlur.parBlur, false)
+    Runner.runBlur(VertBlur.blur, VertBlur.parBlur, false)

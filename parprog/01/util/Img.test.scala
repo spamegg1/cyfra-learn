@@ -10,14 +10,14 @@ class ImgSuite extends munit.FunSuite:
     for
       x <- 0 until 5
       y <- 0 until 5
-    do src(x, y) = RGBA.rgba(x, y, x + y, math.abs(x - y))
+    do src(x, y) = Rgba.rgba(x, y, x + y, math.abs(x - y))
     for
       x <- 0 until 5
       y <- 0 until 5
     do
       assertEquals(
         src.boxBlurKernel(x, y, 0),
-        RGBA.rgba(x, y, x + y, math.abs(x - y)),
+        Rgba.rgba(x, y, x + y, math.abs(x - y)),
         "boxBlurKernel(_,_,0) should be identity."
       )
 
