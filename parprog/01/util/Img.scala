@@ -57,9 +57,8 @@ object Img:
   def clamp(v: Int, min: Int, max: Int): Int =
     if v < min then min else if v > max then max else v
 
-  def save(img: Img, horiz: Boolean): Unit =
-    val name   = if horiz then "horiz" else "vert"
-    val file   = os.pwd / "parprog" / "01" / "images" / s"cream-blurred-$name.jpg"
+  def save(img: Img): Unit =
+    val file   = os.pwd / "parprog" / "01" / "images" / s"cream-blurred.jpg"
     val stream = os.write.outputStream(file)
     try saveImage(stream, img)
     finally stream.close()

@@ -212,7 +212,7 @@ Note that the arguments **from** (included) and **end** (excluded) this
 time denote the the values of the **y** coordinate (i.e, row indices),
 and that we traverse the pixels left-to-right within each strip.
 
-You can now run the **HorizBlur** program.
+You can now run the **CpuBlur** program.
 
 If you implemented the two blur versions correctly,
 you should observe that the horizontal stripping is slightly faster.

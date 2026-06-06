@@ -2,7 +2,7 @@ package parprog
 package blur
 
 /** A simple, trivially parallelizable computation. */
-object HorizBlur:
+object CpuBlur:
   /** Blurs the rows of the source image `src` into the destination image `dst`, starting with `from` and ending with
     * `end` (non-inclusive). Within each row, `blur` traverses the pixels by going from left to right.
     */
@@ -34,7 +34,3 @@ object HorizBlur:
       yield Parallel.task:
         blur(src, dst, from, endPt, radius)
     tasks.map(_.join) // joining OUTSIDE for-loop necessary for parallelization
-
-  @main
-  def mainHorizontal: Unit =
-    Runner.runBlur(HorizBlur.blur, HorizBlur.parBlur, horiz = true)
