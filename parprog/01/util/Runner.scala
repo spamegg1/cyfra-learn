@@ -12,9 +12,9 @@ object Runner:
   ).withWarmer(Warmer.Default())
 
   @main
-  def runBlur: Unit =
-    val radius   = 4
-    val numTasks = 8
+  def runCpuBlur: Unit =
+    val radius   = 3
+    val numTasks = 16
     val src      = Img.load
     val dst1     = Img(src.width, src.height)
     val dst2     = Img(src.width, src.height)
@@ -30,5 +30,27 @@ object Runner:
     println(s"speedup: ${seqtime.value / partime.value}")
 
     Img.save(dst2)
-  end runBlur
+  end runCpuBlur
+
+  @main
+  def runGpuBlur =
+    val size = 256
+    val r    = 3
+    val src  = Img.load
+    val w    = src.width
+    val h    = src.height
+    val dst1 = Img(w, h)
+    val dst2 = Img(w, h)
+
+    val seqtime = standardConfig.measure:
+      CpuBlur.blur(src, dst1, 0, h, r)
+    val partime = standardConfig.measure:
+      GpuBlur.parBlur(???, size, r, w, h)
+
+    println(s"sequential blur time: $seqtime")
+    println(s"Gpu parallel blur time: $partime")
+    println(s"speedup: ${seqtime.value / partime.value}")
+
+    Img.save(dst2)
+  end runGpuBlur
 end Runner
