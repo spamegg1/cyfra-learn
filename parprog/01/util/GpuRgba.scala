@@ -7,8 +7,11 @@ object GpuRgba:
   /** The value of every pixel is represented as a 32 bit integer. */
   type Grgba = Int32
 
+  def clampGpu(v: Int32, min: Int32, max: Int32): Int32 =
+    when(v < min)(min).elseWhen(v > max)(max).otherwise(v)
+
   /** Used to create an Rgba value from separate components. */
-  def Rgba(r: Int32, g: Int32, b: Int32, a: Int32): Grgba =
+  def rgba(r: Int32, g: Int32, b: Int32, a: Int32): Grgba =
     (r << 24) | (g << 16) | (b << 8) | (a << 0)
 
   extension (c: Grgba)

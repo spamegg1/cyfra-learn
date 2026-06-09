@@ -4,7 +4,7 @@ package blur
 import Rgba.*
 
 /** Image is a two-dimensional matrix of pixel values. */
-class Img(val width: Int, val height: Int, private val data: Array[Rgba]):
+class Img(val width: Int, val height: Int, val data: Array[Rgba]):
   def apply(x: Int, y: Int): Rgba           = data(y * width + x)
   def update(x: Int, y: Int, c: Rgba): Unit = data(y * width + x) = c
 

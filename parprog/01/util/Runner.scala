@@ -13,19 +13,20 @@ object Runner:
 
   @main
   def runCpuBlur: Unit =
-    val radius   = 3
-    val numTasks = 16
-    val src      = Img.load
-    val dst1     = Img(src.width, src.height)
-    val dst2     = Img(src.width, src.height)
+    val radius = 3
+    val tasks  = 16
+    val src    = Img.load
+    val (w, h) = (src.width, src.height)
+    val dst1   = Img(w, h)
+    val dst2   = Img(w, h)
 
     val seqtime = standardConfig.measure:
-      CpuBlur.blur(src, dst1, 0, src.height, radius)
+      CpuBlur.blur(src, dst1, 0, h, radius)
     val partime = standardConfig.measure:
-      CpuBlur.parBlur(src, dst2, numTasks, radius)
+      CpuBlur.parBlur(src, dst2, tasks, radius)
 
     println(s"sequential blur time: $seqtime")
-    println(s"number of tasks: $numTasks")
+    println(s"number of tasks: $tasks")
     println(s"fork/join blur time: $partime")
     println(s"speedup: ${seqtime.value / partime.value}")
 
@@ -34,18 +35,18 @@ object Runner:
 
   @main
   def runGpuBlur =
-    val size = 256
-    val r    = 3
-    val src  = Img.load
-    val w    = src.width
-    val h    = src.height
-    val dst1 = Img(w, h)
-    val dst2 = Img(w, h)
+    val src    = Img.load
+    val w      = src.width
+    val h      = src.height
+    val radius = 3
+    val size   = w * h
+    val dst1   = Img(w, h)
+    val dst2   = Img(w, h)
 
     val seqtime = standardConfig.measure:
-      CpuBlur.blur(src, dst1, 0, h, r)
+      CpuBlur.blur(src, dst1, 0, h, radius)
     val partime = standardConfig.measure:
-      GpuBlur.parBlur(???, size, r, w, h)
+      GpuBlur.parBlur(src.data, dst2.data, size, radius, w, h)
 
     println(s"sequential blur time: $seqtime")
     println(s"Gpu parallel blur time: $partime")
